@@ -8,5 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!--Added extra colors here for usage in the application-->
     <color name="turmeric">#e98e00</color>
+    <color name="orange">#DB4914</color>
+    <color name="gray">#FFA500</color>
+    <color name="green">#298F41</color>
+    <color name="blue">#0D638F</color>
+    <color name="red">#400200</color>
+    <color name="dark_red">#CC0700</color>
 </resources>

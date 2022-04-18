@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/contactFormLabel"
-            android:text="Add Contact"
+            android:text="Add Contact Information"
             android:textSize="19sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -30,9 +30,14 @@
             android:hint="First Name"
             android:inputType="textPersonName"
             android:textColor="@color/black"
+            android:background="@drawable/shape_background"
+            android:padding="15dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -42,30 +47,45 @@
             android:inputType="textPersonName"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:background="@drawable/shape_background"
+            android:padding="15dp"
             android:textStyle="bold"
-            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/numberField"
-            android:hint="Contact Number"
+            android:hint="Mobile No. "
             android:inputType="phone"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:background="@drawable/shape_background"
+            android:padding="15dp"
             android:textStyle="bold"
-            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/emailField"
-            android:hint="Email"
+            android:hint="Email Address. "
             android:inputType="textEmailAddress"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:background="@drawable/shape_background"
+            android:padding="15dp"
             android:textStyle="bold"
-            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

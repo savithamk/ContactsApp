@@ -2,6 +2,7 @@ package com.savithamaiya.contactsapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.savithamaiya.contactsapp.model.Contact;
 
 import java.lang.reflect.Field;
@@ -27,9 +30,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private Context context;
     private List<Contact> contacts;
 
+    SharedPreferences sharedPreferences;
+
     public ContactsAdapter(Context context,List<Contact> contacts){
         this.context = context;
         this.contacts = contacts;
+        sharedPreferences = this.context.getSharedPreferences("ContactPrefs",Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -58,6 +64,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         private TextView contactNumberTextView;
         private ImageView contactMenuView;
 
+        private Gson gson = new GsonBuilder().create();
+
         public ContactsViewHolder(@NonNull View view) {
             super(view);
             nameTextView = view.findViewById(R.id.contactNameView);
@@ -74,27 +82,29 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         private void buildPopUp(View view) {
             Contact contact = contacts.get(getAdapterPosition());
-            PopupMenu dropMenu = new PopupMenu(context,view);
+            PopupMenu dropMenu = new PopupMenu(context, view);
+            dropMenu.getMenuInflater().inflate(R.menu.contact_menu, dropMenu.getMenu());
             dropMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    return popUpMenuActions(menuItem,contact);
+                    return popUpMenuActions(menuItem, contact);
                 }
             });
             dropMenu.show();
-            try{
+            try {
                 Field popup = PopupMenu.class.getDeclaredField("mPopup");
                 popup.setAccessible(true);
                 Object menu = popup.get(dropMenu);
-                menu.getClass().getDeclaredMethod("setForceShowIcon",boolean.class).invoke(menu,true);
-            }catch (Exception e){}
+                menu.getClass().getDeclaredMethod("setForceShowIcon", boolean.class).invoke(menu, true);
+            } catch (Exception e) {
+            }
 
         }
 
-        private boolean popUpMenuActions(MenuItem menuItem,Contact contact) {
-            switch (menuItem.getItemId()){
+        private boolean popUpMenuActions(MenuItem menuItem, Contact contact) {
+            switch (menuItem.getItemId()) {
                 case R.id.editContact:
-                    View editContactView = LayoutInflater.from(context).inflate(R.layout.add_contact,null,false);
+                    View editContactView = LayoutInflater.from(context).inflate(R.layout.add_contact, null, false);
 
                     EditText firstName = editContactView.findViewById(R.id.firstNameField);
                     EditText lastName = editContactView.findViewById(R.id.lastNameField);
@@ -118,6 +128,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                             contact.setContactNumber(contactNumber.getText().toString());
                             contact.setEmail(email.getText().toString());
                             Collections.sort(contacts);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("contacts", gson.toJson(contacts));
+                            editor.commit();
                             notifyDataSetChanged();
                             showToast("Updated Contact");
                             dialogInterface.dismiss();
@@ -140,6 +153,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     contacts.remove(getAdapterPosition());
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("contacts", gson.toJson(contacts));
+                                    editor.commit();
+                                    notifyDataSetChanged();
                                     showToast("Deleted Contact");
                                     dialogInterface.dismiss();
                                 }
@@ -152,12 +169,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                                 }
                             }).create().show();
                     return true;
-                default:return false;
+                default:
+                    return false;
             }
         }
 
         private void showToast(String message) {
-            Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
 
         public TextView getNameTextView() {
