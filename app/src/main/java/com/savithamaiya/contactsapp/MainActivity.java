@@ -1,4 +1,4 @@
-package com.savithamaiya.contacts;
+package com.savithamaiya.contactsapp;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.savithamaiya.contacts.model.Contact;
+import com.savithamaiya.contactsapp.ContactsAdapter;
+import com.savithamaiya.contactsapp.model.Contact;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
