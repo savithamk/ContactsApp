@@ -1,4 +1,4 @@
-package com.savithamaiya.contactsapp;
+package com.savithamaiya.contacts;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.savithamaiya.contactsapp.model.Contact;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.savithamaiya.contacts.model.Contact;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Contact> contacts;
     private ContactsAdapter contactsAdapter;
+
+    private SharedPreferences sharedPreferences;
+
+    private Gson gson = new GsonBuilder().create();
+    private Type type = new TypeToken<ArrayList<Contact>>() {}.getType();
+
+    private static final String SHARED_PREF_NAME = "ContactPrefs";
+    private static final String SHARED_PREF_KEY = "contacts";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(contactsAdapter);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
+        String contactList = sharedPreferences.getString(SHARED_PREF_KEY,"");
+
+        if(!contactList.isEmpty()){
+            contacts.addAll(gson.fromJson(contactList,type));
+        }
 
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         String email = emailField.getText().toString();
                         contacts.add(new Contact(firstName, lastName, contactNumber, email));
                         Collections.sort(contacts);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("contacts",gson.toJson(contacts));
+                        editor.commit();
                         contactsAdapter.notifyDataSetChanged();
                         showToast("Contact Added");
                         dialogInterface.dismiss();
