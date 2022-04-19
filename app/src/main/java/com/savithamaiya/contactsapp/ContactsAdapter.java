@@ -66,6 +66,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         private Gson gson = new GsonBuilder().create();
 
+        //Setting the list of contacts in the home screen
         public ContactsViewHolder(@NonNull View view) {
             super(view);
             nameTextView = view.findViewById(R.id.contactNameView);
@@ -80,6 +81,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             });
         }
 
+        //Showing popup to editing and deleting contact info
         private void buildPopUp(View view) {
             Contact contact = contacts.get(getAdapterPosition());
             PopupMenu dropMenu = new PopupMenu(context, view);
