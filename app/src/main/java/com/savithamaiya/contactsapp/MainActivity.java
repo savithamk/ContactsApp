@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(contactsAdapter);
 
+        //Initializing shared preferences
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
         String contactList = sharedPreferences.getString(SHARED_PREF_KEY,"");
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //To show the screen for adding a new contact
     private void addContactInfo() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View addContactView = layoutInflater.inflate(R.layout.add_contact,null,false);
